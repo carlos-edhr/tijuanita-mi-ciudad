@@ -1,0 +1,106 @@
+"use client";
+import { useTRPC } from "@/trpc/client";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+
+interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export const CategoriesSidebar = ({ open, onOpenChange }: Props) => {
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.categories.getMany.queryOptions());
+
+  const router = useRouter();
+
+  const [parentCategories, setParentCategories] =
+    useState<CategoriesGetManyOutput | null>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoriesGetManyOutput[1] | null
+  >(null);
+
+  const currentCategories = parentCategories ?? data ?? [];
+
+  const handleOpenChange = (open: boolean) => {
+    setSelectedCategory(null);
+    setParentCategories(null);
+    onOpenChange(open);
+  };
+
+  const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
+    if (category.subcategories && category.subcategories.length > 0) {
+      setParentCategories(
+        category.subcategories as unknown as CategoriesGetManyOutput,
+      );
+      setSelectedCategory(category);
+    } else {
+      if (parentCategories && selectedCategory) {
+        router.push(`/${selectedCategory.slug}/${category.slug}`);
+      } else {
+        if (category.slug === "all") {
+          router.push("/");
+        } else {
+          router.push(`/${category.slug}`);
+        }
+      }
+      handleOpenChange(false);
+    }
+  };
+
+  const handleBackClick = () => {
+    if (parentCategories) {
+      setParentCategories(null);
+      setSelectedCategory(null);
+    }
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="left"
+        className="p-0 bg-blackBackgroundNew border-r border-gray-800"
+      >
+        <SheetHeader className="p-6 border-b border-gray-800">
+          <SheetTitle className="font-bebas text-2xl text-white uppercase tracking-wider">
+            Categorías
+          </SheetTitle>
+        </SheetHeader>
+        <ScrollArea className="flex flex-col h-full pb-20">
+          {parentCategories && (
+            <button
+              onClick={handleBackClick}
+              className="w-full text-left p-4 hover:bg-gray-800 flex items-center text-base font-medium cursor-pointer text-white font-robotoCondensed"
+            >
+              <ChevronLeftIcon className="size-5 mr-2 text-azulAstro" />
+              <span className="text-azulAstro">Volver</span>
+            </button>
+          )}
+          {currentCategories.map((category) => (
+            <button
+              key={category.slug}
+              onClick={() => handleCategoryClick(category)}
+              className="w-full text-left p-4 hover:bg-gray-800 flex justify-between items-center text-base font-medium cursor-pointer text-white font-robotoCondensed"
+            >
+              <span>{category.name}</span>
+              {category.subcategories && category.subcategories.length > 0 && (
+                <ChevronRightIcon className="size-5 text-azulAstro" />
+              )}
+            </button>
+          ))}
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
+  );
+};
