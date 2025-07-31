@@ -9,5 +9,5 @@ export const appRouter = createTRPCRouter({
   asistentes: asistentesRouter,
   voluntarios: voluntariosRouter,
 });
-// export type definition of API
+// export type definition - API
 export type AppRouter = typeof appRouter;
