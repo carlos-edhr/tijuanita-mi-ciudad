@@ -10,7 +10,8 @@ import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
-// import { Categories } from "./collections/Categories";
+import { Voluntarios } from "./collections/Voluntarios";
+import { Asistentes } from "./collections/Asistentes";
 // import { Products } from "./collections/Products";
 // import { Tags } from "./collections/Tags";
 // import { Tenants } from "./collections/Tenants";
@@ -41,6 +42,8 @@ export default buildConfig({
   collections: [
     Users,
     Media,
+    Voluntarios,
+    Asistentes,
     // Categories,
     // Products,
     // Tags,

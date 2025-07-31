@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    voluntarios: Voluntario;
+    asistentes: Asistente;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -77,6 +79,8 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    voluntarios: VoluntariosSelect<false> | VoluntariosSelect<true>;
+    asistentes: AsistentesSelect<false> | AsistentesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -122,23 +126,7 @@ export interface User {
   username: string;
   name?: string | null;
   image?: (string | null) | Media;
-  /**
-   * Configuración para la transmisión, no es necesario agregarla manualmente.
-   */
-  ingressId?: string | null;
-  /**
-   * Configuración para la transmisión, no es necesario agregarla manualmente.
-   */
-  serverUrl?: string | null;
-  /**
-   * Configuración para la transmisión, no es necesario agregarla manualmente.
-   */
-  streamKey?: string | null;
-  roles?: ('super-admin' | 'user')[] | null;
-  /**
-   * Stripe Account ID associated with your shop
-   */
-  stripeAccountId?: string | null;
+  roles?: ('super-admin' | 'user' | 'voluntario' | 'asistente')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -177,6 +165,121 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Datos de las personas voluntarias
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "voluntarios".
+ */
+export interface Voluntario {
+  id: string;
+  email: string;
+  name: string;
+  /**
+   * Número de teléfono de la persona voluntaria
+   */
+  telefono?: string | null;
+  edad?: number | null;
+  /**
+   * Ocupación de la persona voluntaria
+   */
+  ocupacion?: string | null;
+  /**
+   * Respuesta a: ¿Cómo te enteraste del voluntariado?
+   */
+  comoSeEntero?:
+    | (
+        | 'Fui voluntarix en la 2da edición (Mayo 2025)'
+        | 'Invitación del equipo organizador'
+        | 'Redes sociales'
+        | 'UABC'
+        | 'IBERO'
+        | 'Otro'
+      )
+    | null;
+  /**
+   * Respuesta a:  ¿En qué equipo te interesaría participar?
+   */
+  equipo?: ('REGISTRO' | 'SEGURIDAD' | 'MONTAJE-DESMONTAJE' | 'CONVIVENCIA') | null;
+  /**
+   * Respuesta a: Es necesario estar disponible de 7:30 a 14:30 horas. Se brindará un lunch e identificativo. Coordinaremos rotación y descansos.
+   */
+  confirmacionDeDisponibilidad?:
+    | ('Estoy de acuerdo' | 'En desacuerdo' | 'Me comunicaré con la coordinadora para revisar mi caso particular')
+    | null;
+  /**
+   * Respuesta a: La segunda capacitación será presencial (en la vía recreativa) en Playas de Tijuana el día Domingo 24 de Agosto.
+   */
+  capacitacion1?: ('De acuerdo' | 'Me comunicaré para resolver si no puedo en esta fecha.') | null;
+  /**
+   * Respuesta a: La segunda capacitación será presencial (en la vía recreativa) en Playas de Tijuana el día Domingo 24 de Agosto.
+   */
+  capacitacion2?:
+    | (
+        | 'Tengo mayor disponibilidad en la mañana (10am a 12pm)'
+        | 'Tengo mayor disponibilidad en la tarde (12pm a 14pm)'
+        | 'Tengo mayor disponibilidad de las 14pm en adelante'
+      )
+    | null;
+  /**
+   * Seleccionar únicamente si la persona voluntaria ya cuenta con un usuario registrado en la plataforma.
+   */
+  user?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Datos de las personas asistentes a la Vía Recreativa
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asistentes".
+ */
+export interface Asistente {
+  id: string;
+  email: string;
+  /**
+   * Respuesta a: ¿Viene en compañía de un menor de edad?
+   */
+  acompañanteMenorDeEdad?: boolean | null;
+  /**
+   * Respuesta a: ¿Cuántos menores de edad vienen con usted? Responder con número,
+   */
+  cantidadAcompañanteMenorDeEdad?: number | null;
+  /**
+   * Respuesta a: ¿Qué edad tienen? / no aplica
+   */
+  edadesMenoresDeEdad?:
+    | ('0 a 11 meses' | '1 a 3 años' | '4 a 6 años' | '7 a 13 años' | '14 a 17 años' | 'no aplica')
+    | null;
+  /**
+   * Respuesta a: ¿Asiste alguna persona dentro de poblaciones prioritarias?
+   */
+  poblacionesPrioritarias?: ('No' | 'Persona con discapacidad' | 'Embarazada' | 'Persona adulta mayor') | null;
+  /**
+   * Respuesta a: ¿De qué zona de la ciudad asiste?
+   */
+  zonaCiudad?: string | null;
+  /**
+   * Respuesta a:  ¿Cómo se enteró del evento?
+   */
+  comoSeEntero?:
+    | ('Instagram' | 'Facebook' | 'Póster' | 'Invitación de la escuela' | 'Recomendación de boca en boca' | 'Otro')
+    | null;
+  /**
+   * Respuesta a: ¿Ha participado en ediciones anteriores de la Vía Recreativa?
+   */
+  participacionPrevia?: string | null;
+  /**
+   * Respuesta a: ¿Tiene alguna pregunta o comentario? Le responderemos a su correo registrado.
+   */
+  comentario?: string | null;
+  /**
+   * Seleccionar únicamente si la persona voluntaria ya cuenta con un usuario registrado en la plataforma.
+   */
+  user?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
@@ -190,6 +293,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'voluntarios';
+        value: string | Voluntario;
+      } | null)
+    | ({
+        relationTo: 'asistentes';
+        value: string | Asistente;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -241,11 +352,7 @@ export interface UsersSelect<T extends boolean = true> {
   username?: T;
   name?: T;
   image?: T;
-  ingressId?: T;
-  serverUrl?: T;
-  streamKey?: T;
   roles?: T;
-  stripeAccountId?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -280,6 +387,43 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "voluntarios_select".
+ */
+export interface VoluntariosSelect<T extends boolean = true> {
+  email?: T;
+  name?: T;
+  telefono?: T;
+  edad?: T;
+  ocupacion?: T;
+  comoSeEntero?: T;
+  equipo?: T;
+  confirmacionDeDisponibilidad?: T;
+  capacitacion1?: T;
+  capacitacion2?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asistentes_select".
+ */
+export interface AsistentesSelect<T extends boolean = true> {
+  email?: T;
+  acompañanteMenorDeEdad?: T;
+  cantidadAcompañanteMenorDeEdad?: T;
+  edadesMenoresDeEdad?: T;
+  poblacionesPrioritarias?: T;
+  zonaCiudad?: T;
+  comoSeEntero?: T;
+  participacionPrevia?: T;
+  comentario?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

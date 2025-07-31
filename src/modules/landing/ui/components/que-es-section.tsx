@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import LogoCarousel from "./logo-carousel";
-import Link from "next/link";
+// import Link from "next/link";
 
 const CARD_DATA = [
   {
@@ -277,25 +277,16 @@ export function QueEsSection() {
       />
 
       {/* Call to action */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="mt-16 text-center"
-      >
-        <Link
-          href="mailto:tijuanitamiciudad@gmail.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button className="inline-flex animate-shine items-center justify-center rounded-2xl bg-gradient-to-r from-[#4F46E5] via-[#0a33ff] to-[#4F46E5] bg-[length:200%_auto] px-8 py-6 text-lg font-semibold text-white transition-all hover:scale-105 hover:shadow-lg">
-            ¡Únete!
+      {/* <div className="mt-16 text-center z-[9999]">
+        <Link href="/voluntarios">
+          <Button className="z-[9999] inline-flex animate-shine items-center justify-center rounded-2xl bg-gradient-to-r from-[#4F46E5] via-[#0a33ff] to-[#4F46E5] bg-[length:200%_auto] px-8 py-6 text-lg font-semibold text-white transition-all hover:scale-105 hover:shadow-lg">
+            ¡Súmate!
           </Button>
-        </Link>
-        {/* <Button className="animate-shine bg-gradient-to-r from-[#fde047] via-[#f59e0b] to-[#fde047] bg-[length:200%_auto] px-8 py-6 text-lg font-semibold text-gray-900 hover:scale-105 transition-transform">
+        </Link> */}
+      {/* <Button className="animate-shine bg-gradient-to-r from-[#fde047] via-[#f59e0b] to-[#fde047] bg-[length:200%_auto] px-8 py-6 text-lg font-semibold text-gray-900 hover:scale-105 transition-transform">
           ¡Únete !
         </Button> */}
-      </motion.div>
+      {/* </div> */}
       <LogoCarousel />
     </section>
   );

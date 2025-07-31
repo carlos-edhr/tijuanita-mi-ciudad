@@ -3,18 +3,34 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FacebookIcon, InstagramIcon, Menu, X } from "lucide-react";
 import Image from "next/image";
-
-const navLinks = [
-  { name: "¿Qué es?", link: "#quees" },
-  { name: "¿Quiénes somos?", link: "#quienes" },
-  { name: "¿Qué hacemos?", link: "#eventos" },
-  { name: "Galería", link: "#galeria" },
-  { name: "Contáctanos", link: "#contacto" },
-];
+import { usePathname } from "next/navigation"; // Importamos usePathname
 
 const Navbar = () => {
+  const pathname = usePathname(); // Obtenemos la ruta actual
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Determinar si estamos en una ruta especial
+  const isVoluntarios = pathname === "/voluntarios";
+
+  // const isAsistentes = pathname === "/registro";
+
+  // Definir los enlaces basados en la ruta
+  const navLinks = isVoluntarios
+    ? [
+        { name: "Volver al sitio de inicio", link: "/" },
+        {
+          name: "¿Te interesa registrarte a la Vía Recreativa? ¡Da click aquí!",
+          link: "/registro",
+        },
+      ]
+    : [
+        { name: "Volver al sitio de inicio", link: "/" },
+        {
+          name: "¿Te interesa colaborar como voluntario? ¡Da click aquí!",
+          link: "/voluntarios",
+        },
+      ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +41,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -39,7 +54,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+      className={`w-full top-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm"
           : "bg-transparent"
@@ -57,7 +72,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link
-            href="#hero"
+            href="/"
             className="flex items-center gap-2 z-10"
             onClick={() => setIsOpen(false)}
           >
@@ -106,12 +121,21 @@ const Navbar = () => {
               </a>
             </div>
 
-            <Link
-              href="/voluntarios"
-              className="ml-6 px-6 py-2 rounded-full bg-gradient-to-r from-moradoSecundario to-[#0a33ff] text-white text-sm font-bold hover:opacity-90 transition-opacity"
-            >
-              ¡Súmate!
-            </Link>
+            {/* {isSpecialRoute ? (
+              <Link
+                href="/login"
+                className="ml-6 px-6 py-2 rounded-full bg-gradient-to-r from-moradoSecundario to-[#0a33ff] text-white text-sm font-bold hover:opacity-90 transition-opacity"
+              >
+                Iniciar sesión
+              </Link>
+            ) : (
+              <Link
+                href="/voluntarios"
+                className="ml-6 px-6 py-2 rounded-full bg-gradient-to-r from-moradoSecundario to-[#0a33ff] text-white text-sm font-bold hover:opacity-90 transition-opacity"
+              >
+                ¡Súmate!
+              </Link>
+            )} */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -153,7 +177,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="lg:hidden  inset-0 w-full h-full bg-white z-99 ">
+        <div className="lg:hidden inset-0 w-full h-full bg-white z-99">
           <div className="container mx-auto px-4 pt-24 pb-12">
             {/* Close button inside mobile menu */}
             <button
@@ -175,14 +199,24 @@ const Navbar = () => {
                     {link.name}
                   </Link>
                 ))}
-
-                <Link
-                  href="/voluntarios"
-                  className="block px-6 py-4 rounded-xl bg-gradient-to-r from-moradoSecundario to-[#0a33ff] text-white text-center text-lg font-bold"
-                  onClick={() => setIsOpen(false)}
-                >
-                  ¡Súmate!
-                </Link>
+                {/* 
+                {isSpecialRoute ? (
+                  <Link
+                    href="/login"
+                    className="block px-6 py-4 rounded-xl bg-gradient-to-r from-moradoSecundario to-[#0a33ff] text-white text-center text-lg font-bold"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Iniciar sesión
+                  </Link>
+                ) : (
+                  <Link
+                    href="/voluntarios"
+                    className="block px-6 py-4 rounded-xl bg-gradient-to-r from-moradoSecundario to-[#0a33ff] text-white text-center text-lg font-bold"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    ¡Súmate!
+                  </Link>
+                )} */}
               </div>
 
               {/* Social Icons - Bottom of Mobile Menu */}

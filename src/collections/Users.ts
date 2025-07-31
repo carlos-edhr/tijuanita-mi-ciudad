@@ -45,14 +45,15 @@ export const Users: CollectionConfig = {
   fields: [
     {
       name: "username",
+      type: "text",
       required: true,
       unique: true,
-      type: "text",
     },
+
     {
       name: "name",
       required: false,
-      unique: true,
+      unique: false,
       type: "text",
     },
     {
@@ -60,33 +61,7 @@ export const Users: CollectionConfig = {
       type: "upload",
       relationTo: "media",
     },
-    {
-      name: "ingressId",
-      type: "text",
-      required: false,
-      admin: {
-        description:
-          "Configuración para la transmisión, no es necesario agregarla manualmente. ",
-      },
-    },
-    {
-      name: "serverUrl",
-      type: "text",
-      required: false,
-      admin: {
-        description:
-          "Configuración para la transmisión, no es necesario agregarla manualmente. ",
-      },
-    },
-    {
-      name: "streamKey",
-      type: "text",
-      required: false,
-      admin: {
-        description:
-          "Configuración para la transmisión, no es necesario agregarla manualmente. ",
-      },
-    },
+
     // {
     //   name: "stream",
     //   required: false,
@@ -100,22 +75,12 @@ export const Users: CollectionConfig = {
       type: "select",
       defaultValue: ["user"],
       hasMany: true,
-      options: ["super-admin", "user"],
+      options: ["super-admin", "user", "voluntario", "asistente"],
       access: {
         update: ({ req }) => isSuperAdmin(req.user),
       },
     },
-    {
-      name: "stripeAccountId",
-      type: "text",
-      required: false,
-      access: {
-        update: ({ req }) => isSuperAdmin(req.user),
-      },
-      admin: {
-        description: "Stripe Account ID associated with your shop",
-      },
-    },
+
     // {
     //   ...defaultTenantArrayField,
     //   admin: {

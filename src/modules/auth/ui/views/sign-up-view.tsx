@@ -59,7 +59,7 @@ export const SignUpView = () => {
   const showPreview = username && !usernameErrors;
 
   return (
-    <div className="min-h-screen w-full bg-blancoHuesoFondo flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="mb-32 min-h-screen w-full bg-blancoHuesoFondo flex items-center justify-center p-4 relative overflow-hidden">
       {/* Floating decorative elements */}
       <motion.div
         animate={{
