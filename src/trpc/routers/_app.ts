@@ -5,9 +5,8 @@ import { voluntariosRouter } from "@/modules/voluntarios/server/procedures";
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
-
   asistentes: asistentesRouter,
   voluntarios: voluntariosRouter,
 });
-// export type definition - API
+// export type definition- API
 export type AppRouter = typeof appRouter;
