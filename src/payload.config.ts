@@ -1,4 +1,3 @@
-// storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
@@ -12,13 +11,6 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Voluntarios } from "./collections/Voluntarios";
 import { Asistentes } from "./collections/Asistentes";
-// import { Products } from "./collections/Products";
-// import { Tags } from "./collections/Tags";
-// import { Tenants } from "./collections/Tenants";
-// import { Config } from "./payload-types";
-// import { Orders } from "./collections/Orders";
-// import { Reviews } from "./collections/Reviews";
-// import { isSuperAdmin } from "./lib/access";
 import { resendAdapter } from "@payloadcms/email-resend";
 
 const filename = fileURLToPath(import.meta.url);
